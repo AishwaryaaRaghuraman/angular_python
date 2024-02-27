@@ -39,6 +39,14 @@ steps:
   workingDirectory: '$(Build.SourcesDirectory)'
   displayName: 'Build with Angular'
 
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'
+    githubToken: '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'
+    addToPath: true
+    architecture: 'x64'
+  displayName: 'Use Python $(python.version)'
+
 - script: |
     echo Starting the build
     cd backend/
