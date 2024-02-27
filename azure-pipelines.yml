@@ -16,6 +16,15 @@ trigger:
 
 pool: Default
 
+strategy:
+  matrix:
+    Python38:
+      python.version: '3.8'
+    Python39:
+      python.version: '3.9'
+    Python310:
+      python.version: '3.10'
+
 steps:
 - script: echo "Git Clone"
   displayName: 'Git Clone'
@@ -41,10 +50,7 @@ steps:
 
 - task: UsePythonVersion@0
   inputs:
-    versionSpec: '3.x'
-    githubToken: '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'
-    addToPath: true
-    architecture: 'x64'
+    versionSpec: '$(python.version)'
   displayName: 'Use Python $(python.version)'
 
 - script: |
