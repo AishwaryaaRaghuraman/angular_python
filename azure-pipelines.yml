@@ -16,14 +16,6 @@ trigger:
 
 pool: Default
 
-strategy:
-  matrix:
-    Python38:
-      python.version: '3.8'
-    Python39:
-      python.version: '3.9'
-    Python310:
-      python.version: '3.10'
 
 steps:
 - script: echo "Git Clone"
@@ -48,14 +40,11 @@ steps:
   workingDirectory: '$(Build.SourcesDirectory)'
   displayName: 'Build with Angular'
 
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '$(python.version)'
-  displayName: 'Use Python $(python.version)'
 
 - script: |
     echo Starting the build
     cd backend/
+    python --version
     python3 -m venv venv
     source venv/bin/activate
     pip install -r requirements.txt
