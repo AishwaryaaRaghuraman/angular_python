@@ -1,0 +1,50 @@
+  # Azure Pipelines YAML file for Angular-Python Application
+
+parameters:
+- name: gitUsername
+  type: string
+  default: AishwaryaaRaghuraman
+- name: repoName
+  type: string
+  default: angular_python
+- name: branchName
+  type: string
+  default: main
+
+trigger:
+- main
+
+pool: Default
+
+steps:
+- script: echo "Git Clone"
+  displayName: 'Git Clone'
+  env:
+    GIT_USERNAME: $(gitUsername)
+    REPO_NAME: $(repoName)
+    BRANCH_NAME: $(branchName)
+  continueOnError: false
+
+- script: |
+    echo Starting the build
+    npm install
+    ng build --prod
+  displayName: 'Build with Angular'
+
+- script: |
+    echo Starting the build
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install -r requirements.txt
+  displayName: 'Build with Python'
+
+- script: |
+    echo "Running SonarQube Scan"
+    sonar-scanner.bat -D"sonar.projectKey=$(projectkey)" -D"sonar.sources=." -D"sonar.host.url=$(SONAR_URL)" -D"sonar.token=$(SONAR_TOKEN)" 
+    displayName: 'Run SonarQube Scanning'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Pipeline.Workspace)'
+    artifact: 'build-artifact'
+    publishLocation: 'pipeline'
