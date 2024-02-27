@@ -44,7 +44,7 @@ steps:
   displayName: "Run unit tests"
   inputs:
     script: |
-      cd AngularWithAzure/
+      cd frontend/
       ng test --browsers=ChromeHeadless --code-coverage --watch=false
       
 - script: |
