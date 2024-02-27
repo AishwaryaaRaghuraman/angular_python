@@ -40,6 +40,12 @@ steps:
   workingDirectory: '$(Build.SourcesDirectory)'
   displayName: 'Build with Angular'
 
+- task: CmdLine@2
+  displayName: "Run unit tests"
+  inputs:
+    script: |
+      cd frontend/
+      ng test --browsers=ChromeHeadless --code-coverage --watch=false
       
 - script: |
     echo Starting the build
@@ -54,6 +60,8 @@ steps:
     echo "Running SonarQube Scan"
     sonar-scanner.bat -D"sonar.projectKey=$(projectkey)" -D"sonar.sources=." -D"sonar.host.url=$(SONAR_URL)" -D"sonar.token=$(SONAR_TOKEN)" 
     displayName: 'Run SonarQube Scanning'
+
+
 
 
 - task: ArchiveFiles@2
