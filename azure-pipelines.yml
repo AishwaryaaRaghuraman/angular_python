@@ -40,7 +40,13 @@ steps:
   workingDirectory: '$(Build.SourcesDirectory)'
   displayName: 'Build with Angular'
 
-
+- task: CmdLine@2
+  displayName: "Run unit tests"
+  inputs:
+    script: |
+      cd AngularWithAzure/
+      ng test --browsers=ChromeHeadless --code-coverage --watch=false
+      
 - script: |
     echo Starting the build
     cd backend/
@@ -55,8 +61,19 @@ steps:
     sonar-scanner.bat -D"sonar.projectKey=$(projectkey)" -D"sonar.sources=." -D"sonar.host.url=$(SONAR_URL)" -D"sonar.token=$(SONAR_TOKEN)" 
     displayName: 'Run SonarQube Scanning'
 
-- task: PublishPipelineArtifact@1
+
+
+- task: ArchiveFiles@2
+  displayName: 'Archive files'
   inputs:
-    targetPath: '$(Pipeline.Workspace)'
-    artifact: 'build-artifact'
-    publishLocation: 'pipeline'
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist/angular-with-azure/'
+    includeRootFolder: false
+    archiveType: zip
+    archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+    replaceExistingArchive: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
