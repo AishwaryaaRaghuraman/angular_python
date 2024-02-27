@@ -45,8 +45,8 @@ steps:
     echo Starting the build
     cd backend/
     python --version
-    python3 -m venv venv
-    source venv/bin/activate
+    python -m venv venv
+    .\venv\Scripts\activate 
     pip install -r requirements.txt
   displayName: 'Build with Python'
 
