@@ -37,7 +37,6 @@ steps:
     npm install -g @angular/cli
     npm install
     ng build --prod    
-  workingDirectory: '$(Build.SourcesDirectory)'
   displayName: 'Build with Angular'
 
       
@@ -61,7 +60,7 @@ steps:
 - task: ArchiveFiles@2
   displayName: 'Archive files'
   inputs:
-          rootFolderOrFile: '$(Build.SourcesDirectory)/dist/'
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/'
           includeRootFolder: false
           archiveType: zip
           archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
